@@ -1,0 +1,1 @@
+    FlightDate = db.Column(db.Date, default=datetime.date.today)
