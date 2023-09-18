@@ -1,13 +1,13 @@
 
 from flask import Blueprint, render_template, url_for, request, flash, redirect
+from flask_login import login_required, login_user, logout_user, current_user
 from sqlalchemy import text
 from flask_login import login_required, login_user, logout_user
 
-# from webdata.__init__ import app
-# sama aja dgn bawah
-from webdata import bcrypt, db
 
+from webdata import bcrypt, db
 from webdata.models import User, City, City, SeatType, Flight, Route, Airlines, datetime
+import datetime
 
 main = Blueprint('main', __name__)
 
@@ -122,6 +122,11 @@ def result():
     
     seattypes = SeatType.query.all()
     cities = City.query.all()
+    # return render_template('index.html', cities=cities, seattypes=seattypes)
+        
+    current_time = datetime.datetime.utcnow()
+    print(current_time)
+    return render_template('search_result.html', cities=cities, seattypes=seattypes, current_time=current_time)    
     
     query = text('''
         SELECT f.flight_id, a.airline_name, c1.city_name, DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', FORMAT(f.flight_price + (f.flight_price * st.seat_type_price / 100), 2) AS 'price'
@@ -168,7 +173,6 @@ def logout():
     flash("User has been logged out succesfully!", "success")
     return redirect(url_for('main.index'))
 
-
 # @app.route('/add_dummy_data')
 # def add_dummy_data():
 #     temp = 'admin123'
@@ -184,3 +188,20 @@ def logout():
     #     db.session.add(user)
     #     db.session.commit()
     # return 'ok'
+    
+@main.route('/pay/<int:booking_id>')
+@login_required
+def pay(booking_id):
+    booking = Booking.query.get(booking_id)
+    
+    if booking.user_id != current_user.user_id:
+        flash("You don't have access to this page!", "danger")
+        return redirect(url_for('main.index'))
+    current_time = datetime.datetime.utcnow()
+    print(current_time)
+    return render_template('payment.html', booking=booking, current_time=current_time)
+
+'''
+lagi di halaman html 
+url_for('main.pay', booking_id=booking.booking_id)
+'''
