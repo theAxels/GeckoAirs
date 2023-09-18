@@ -1,6 +1,10 @@
 from webdata import db, loginManager
 from flask_login import UserMixin
 import datetime
+import locale
+
+# Set the desired locale (you can change this based on your requirements)
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 @loginManager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -46,6 +50,39 @@ class Flight(db.Model):
     seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
     
+    @property
+    def route_detail(self):
+        return Route.query.get(self.route_id)
+    
+    @property
+    def airline_detail(self):
+        return Airlines.query.get(self.airline_id)
+    
+    @property
+    def seat_type_detail(self):
+        return SeatType.query.get(self.seat_type_id)
+    
+    @property
+    def total_price(self):
+        total = ((self.flight_price * (self.seat_type_detail.seat_type_price / 100)) + self.flight_price)
+        formatted_price = str(locale.format_string("%.0f", total, grouping=True))
+        formatted_price = formatted_price.replace(',', '.')
+        return formatted_price
+    
+    @property
+    def total_price2(self):
+        total = (self.flight_price * (self.seat_type_detail.seat_type_price / 100))
+        formatted_price = str(locale.format_string("%.0f", total, grouping=True))
+        formatted_price = formatted_price.replace(',', '.')
+        return formatted_price
+    
+    @property
+    def total_price3(self):
+        total = self.flight_price
+        formatted_price = str(locale.format_string("%.0f", total, grouping=True))
+        formatted_price = formatted_price.replace(',', '.')
+        return formatted_price
+    
 class SeatType(db.Model):
     __tablename__ = 'seat_types'
     seat_type_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -62,6 +99,23 @@ class Booking(db.Model):
     seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
     payment_amount = db.Column(db.Integer, nullable=False)
     
+    @property
+    def flight_detail(self):
+        return Flight.query.filter_by(flight_id=self.flight_id).first()
+    
+    @property
+    def user_detail(self):
+        return User.query.filter_by(user_id=self.user_id).first()
+    
+    @property
+    def seat_type_detail(self):
+        return SeatType.query.filter_by(seat_type_id=self.seat_type_id).first()
+
+    # booking.flight_detail.flight_name
+    @property
+    def __repr__(self):
+        return f'{self.booking_id} - {self.user_id} - {self.flight_id} - {self.booking_date} - {self.booking_status} - {self.seat_type_id} - {self.payment_amount}'
+    
 class Payment(db.Model):
     __tablename__ = 'payments'
     payment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -74,3 +128,11 @@ class Route(db.Model):
     origin_city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'), nullable=False)
     destination_city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'), nullable=False)
     duration_hours = db.Column(db.Integer, nullable=False)
+    
+    @property
+    def origin_city_detail(self):
+        return City.query.get(self.origin_city_id)
+    
+    @property
+    def destination_city_detail(self):
+        return City.query.get(self.destination_city_id)

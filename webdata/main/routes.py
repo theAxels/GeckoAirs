@@ -1,12 +1,13 @@
 
 from flask import Blueprint, render_template, url_for, request, flash, redirect
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 # from webdata.__init__ import app
 # sama aja dgn bawah
 from webdata import bcrypt, db
 
-from webdata.models import User, City, SeatType
+from webdata.models import User, City, SeatType, Booking
+import datetime
 
 main = Blueprint('main', __name__)
 
@@ -119,8 +120,9 @@ def search_result():
     cities = City.query.all()
     # return render_template('index.html', cities=cities, seattypes=seattypes)
         
-        
-    return render_template('search_result.html', cities=cities, seattypes=seattypes)    
+    current_time = datetime.datetime.utcnow()
+    print(current_time)
+    return render_template('search_result.html', cities=cities, seattypes=seattypes, current_time=current_time)    
 
 @main.route('/logout')
 @login_required
@@ -128,7 +130,6 @@ def logout():
     logout_user()
     flash("User has been logged out succesfully!", "success")
     return redirect(url_for('main.index'))
-
 
 # @app.route('/add_dummy_data')
 # def add_dummy_data():
@@ -145,3 +146,20 @@ def logout():
     #     db.session.add(user)
     #     db.session.commit()
     # return 'ok'
+    
+@main.route('/pay/<int:booking_id>')
+@login_required
+def pay(booking_id):
+    booking = Booking.query.get(booking_id)
+    
+    if booking.user_id != current_user.user_id:
+        flash("You don't have access to this page!", "danger")
+        return redirect(url_for('main.index'))
+    current_time = datetime.datetime.utcnow()
+    print(current_time)
+    return render_template('payment.html', booking=booking, current_time=current_time)
+
+'''
+lagi di halaman html 
+url_for('main.pay', booking_id=booking.booking_id)
+'''
