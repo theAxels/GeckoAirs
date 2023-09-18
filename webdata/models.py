@@ -46,6 +46,7 @@ class Flight(db.Model):
     seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
     
+    
 class SeatType(db.Model):
     __tablename__ = 'seat_types'
     seat_type_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
