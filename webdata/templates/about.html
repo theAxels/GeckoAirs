@@ -13,21 +13,45 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/owl.carousel.min.css">
-  <link rel="stylesheet" href="css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="css/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="fonts/icomoon/style.css">
-  <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-  <link rel="stylesheet" href="css/daterangepicker.css">
-  <link rel="stylesheet" href="css/aos.css">
-  <link rel="stylesheet" href="css/style.css">
-
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/owl.carousel.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/owl.theme.default.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/jquery.fancybox.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='fonts/icomoon/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='fonts/flaticon/font/flaticon.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/daterangepicker.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/aos.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
   <title>About TIX.it</title>
 </head>
 
 <body>
-
+  <style>
+		#alertTop{
+			position: fixed;
+			z-index: 99;
+			bottom: 2vh;
+			left: 5vh;
+			width: 90vw;
+			transition: all ease-in 0.3s;
+		}
+	
+	</style>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				<div id="alertTop" class="auto-close-alert">
+					<div class="row">
+						<div class="col">
+							<div class="alert alert-{{category}}">
+								{{message}}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
 
   <div class="site-mobile-menu site-navbar-target">
     <div class="site-mobile-menu-header">
@@ -39,44 +63,48 @@
   </div>
 
   <nav class="site-nav">
+		<div class="container">
+			<div class="site-navigation">
+				<a href="{{url_for('main.index')}}" class="logo m-0">Gecko<span class="text-primary">.</span>Air</a>
+
+				<ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
+					<li><a href="{{url_for('main.index')}}">Home</a></li>
+					<li class="active"><a href="{{url_for('main.about')}}">About</a></li>
+					{% if current_user.is_authenticated %}
+						<li>
+							<a href="{{url_for('main.logout')}}">Logout | 
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+									<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+									<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+								 </svg>
+							</a> 
+						</li>
+					{% else %}
+						<button type="button" class="btn btn-info btn-round" data-toggle="modal" data-target="#loginModal" id="loginButton">
+							Login | 
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+								<path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+							  </svg>
+						</button> 
+					{% endif %}
+					<!-- <li><a href="login.html">Login</a></li> -->
+				</ul>
+
+				<a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
+					<span></span>
+				</a>
+			</div>
+		</div>
+	</nav>
+
+  <div class="hero">
     <div class="container">
-      <div class="site-navigation">
-        <a href="index.html" class="logo m-0">TIX.it <span class="text-primary">.</span></a>
-
-        <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
-          <li><a href="index.html">Home</a></li>
-          <li class="has-children">
-            <a href="#">Dropdown</a>
-            <ul class="dropdown">
-              <li><a href="elements.html">Elements</a></li>
-              <li><a href="#">Menu One</a></li>
-              <li class="has-children">
-                <a href="#">Menu Two</a>
-                <ul class="dropdown">
-                  <li><a href="#">Sub Menu One</a></li>
-                  <li><a href="#">Sub Menu Two</a></li>
-                  <li><a href="#">Sub Menu Three</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Menu Three</a></li>
-            </ul>
-          </li>
-          <li><a href="services.html">Services</a></li>
-          <li class="active"><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-
-        <a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
-          <span></span>
-        </a>
-
-      </div>
-    </div>
-  </nav>
-
-
-  <div class="hero hero-inner">
-    <div class="container">
+      {% if current_user.is_authenticated %}
+				<div class="user-profile">
+					<b><span class="typed-words2"></span>	{{current_user.name}}</b>
+				</div>
+			{% endif %}
       <div class="row align-items-center">
         <div class="col-lg-6 mx-auto text-center">
           <div class="intro-wrap">
@@ -95,28 +123,16 @@
       <div class="row">
         <div class="col-lg-7">
           <div class="owl-single dots-absolute owl-carousel">
-            <img src="images/slider-1.jpg" alt="Free HTML Template by Untree.co" class="img-fluid rounded-20">
-            <img src="images/slider-2.jpg" alt="Free HTML Template by Untree.co" class="img-fluid rounded-20">
-            <img src="images/slider-3.jpg" alt="Free HTML Template by Untree.co" class="img-fluid rounded-20">
-            <img src="images/slider-4.jpg" alt="Free HTML Template by Untree.co" class="img-fluid rounded-20">
-            <img src="images/slider-5.jpg" alt="Free HTML Template by Untree.co" class="img-fluid rounded-20">
+            <img src="{{url_for('static' , filename='images/slider-1.jpg')}}" class="img-fluid rounded-20">
+            <img src="{{url_for('static' , filename='images/slider-2.jpg')}}" class="img-fluid rounded-20">
+            <img src="{{url_for('static' , filename='images/slider-3.jpg')}}" class="img-fluid rounded-20">
+            <img src="{{url_for('static' , filename='images/slider-4.jpg')}}" class="img-fluid rounded-20">
+            <img src="{{url_for('static' , filename='images/slider-5.jpg')}}" class="img-fluid rounded-20">
           </div>
         </div>
         <div class="col-lg-5 pl-lg-5 ml-auto">
-          <h2 class="section-title mb-4">About Tours</h2>
+          <h2 class="section-title mb-4">About Gecko.Air</h2>
           <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-          <ul class="list-unstyled two-col clearfix">
-            <li>Outdoor recreation activities</li>
-            <li>Airlines</li>
-            <li>Car Rentals</li>
-            <li>Cruise Lines</li>
-            <li>Hotels</li>
-            <li>Railways</li>
-            <li>Travel Insurance</li>
-            <li>Package Tours</li>
-            <li>Insurance</li>
-            <li>Guide Books</li>
-          </ul>
         </div>
       </div>
     </div>
@@ -134,7 +150,7 @@
       <div class="row">
         <div class="col-lg-3 mb-4">
           <div class="team">
-            <img src="images/person_1.jpg" alt="Image" class="img-fluid mb-4 rounded-20">
+            <img src="{{url_for('static',filename='images/person_1.jpg')}}" alt="Image" class="img-fluid mb-4 rounded-20">
             <div class="px-3">
               <h3 class="mb-0">James Watson</h3>
               <p>Co-Founder &amp; CEO</p>
@@ -143,7 +159,7 @@
         </div>
         <div class="col-lg-3 mb-4">
           <div class="team">
-            <img src="images/person_2.jpg" alt="Image" class="img-fluid mb-4 rounded-20">
+            <img src="{{url_for('static',filename='images/person_2.jpg')}}" alt="Image" class="img-fluid mb-4 rounded-20">
             <div class="px-3">
               <h3 class="mb-0">Carl Anderson</h3>
               <p>Co-Founder &amp; CEO</p>
@@ -153,7 +169,7 @@
 
         <div class="col-lg-3 mb-4">
           <div class="team">
-            <img src="images/person_4.jpg" alt="Image" class="img-fluid mb-4 rounded-20">
+            <img src="{{url_for('static',filename='images/person_4.jpg')}}" alt="Image" class="img-fluid mb-4 rounded-20">
             <div class="px-3">
               <h3 class="mb-0">Michelle Allison</h3>
               <p>Co-Founder &amp; CEO</p>
@@ -162,7 +178,7 @@
         </div>
         <div class="col-lg-3 mb-4">
           <div class="team">
-            <img src="images/person_3.jpg" alt="Image" class="img-fluid mb-4 rounded-20">
+            <img src="{{url_for('static',filename='images/person_3.jpg')}}" alt="Image" class="img-fluid mb-4 rounded-20">
             <div class="px-3">
               <h3 class="mb-0">Drew Wood</h3>
               <p>Co-Founder &amp; CEO</p>
@@ -187,7 +203,7 @@
           <div class="owl-single owl-carousel no-nav">
             <div class="testimonial mx-auto">
               <figure class="img-wrap">
-                <img src="images/person_2.jpg" alt="Image" class="img-fluid">
+                <img src="{{url_for('static',filename='images/person_2.jpg')}}" alt="Image" class="img-fluid">
               </figure>
               <h3 class="name">Adam Aderson</h3>
               <blockquote>
@@ -197,7 +213,7 @@
 
             <div class="testimonial mx-auto">
               <figure class="img-wrap">
-                <img src="images/person_3.jpg" alt="Image" class="img-fluid">
+                <img src="{{url_for('static',filename='images/person_3.jpg')}}" alt="Image" class="img-fluid">
               </figure>
               <h3 class="name">Lukas Devlin</h3>
               <blockquote>
@@ -207,7 +223,7 @@
 
             <div class="testimonial mx-auto">
               <figure class="img-wrap">
-                <img src="images/person_4.jpg" alt="Image" class="img-fluid">
+                <img src="{{url_for('static',filename='images/person_4.jpg')}}" alt="Image" class="img-fluid">
               </figure>
               <h3 class="name">Kayla Bryant</h3>
               <blockquote>
@@ -228,10 +244,10 @@
 
         <div class="col-lg-6">
           <figure class="img-play-video">
-            <a id="play-video" class="video-play-button" href="https://www.youtube.com/watch?v=mwtbEGNABWU" data-fancybox>
+            <a id="play-video" class="video-play-button" href="https://youtu.be/2nPLhvjYc8A?si=YPzqeth7lyBG2_t9" data-fancybox>
               <span></span>
             </a>
-            <img src="images/hero-slider-2.jpg" alt="Image" class="img-fluid rounded-20">
+            <img src="{{url_for('static',filename='images/hero-slider-2.jpg')}}" alt="Image" class="img-fluid rounded-20">
           </figure>
         </div>
 
@@ -241,89 +257,66 @@
 
           <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
 
-          <ul class="list-unstyled two-col clearfix">
-            <li>Outdoor recreation activities</li>
-            <li>Airlines</li>
-            <li>Car Rentals</li>
-            <li>Cruise Lines</li>
-            <li>Hotels</li>
-            <li>Railways</li>
-            <li>Travel Insurance</li>
-            <li>Package Tours</li>
-            <li>Insurance</li>
-            <li>Guide Books</li>
-          </ul>
-
-          <p><a href="#" class="btn btn-primary">Get Started</a></p>
+          <p><a href="{{url_for('main.index')}}" class="btn btn-primary">Get Started</a></p>
 
           
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="py-5 cta-section">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-12">
-          <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
-          <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, fugit?</p>
-          <p class="mb-0"><a href="booking.html" class="btn btn-outline-white text-white btn-md font-weight-bold">Get in touch</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="site-footer">
-    <div class="inner first">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-lg-4">
-            <div class="widget">
-              <h3 class="heading">About Tour</h3>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-            </div>
-            <div class="widget">
-              <ul class="list-unstyled social">
-                <li><a href="#"><span class="icon-twitter"></span></a></li>
-                <li><a href="#"><span class="icon-instagram"></span></a></li>
-                <li><a href="#"><span class="icon-facebook"></span></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-2 pl-lg-5">
-            <div class="widget">
-              <h3 class="heading">Pages</h3>
-              <ul class="links list-unstyled">
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-2">
-            <div class="widget">
-              <h3 class="heading">Resources</h3>
-              <ul class="links list-unstyled">
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <div class="widget">
-              <h3 class="heading">Contact</h3>
-              <ul class="list-unstyled quick-info links">
-                <li class="email"><a href="#">mail@example.com</a></li>
-                <li class="phone"><a href="#">+1 222 212 3819</a></li>
-                <li class="address"><a href="#">43 Raymouth Rd. Baltemoer, London 3910</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+		<div class="inner first">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-lg-8">
+						<div class="widget">
+							<a href="{{url_for('main.index')}}" class="logo m-0">Gecko<span class="text-primary">.</span>Air</a>
+							<!-- <h3 class="heading">About TIX.it</h3> -->
+							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4">
+						<div class="widget">
+							<h3 class="heading">Contact</h3>
+							<ul class="list-unstyled quick-info links">
+								<li class="email"><a href="#">gecko.air@mail.com</a></li>
+								<li class="phone"><a href="#">+62 1500 888</a></li>
+								<li class="address"><a href="#">Grand Indonesia Tower A Lt.10, Jakarta 3910</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <div class="modal fade" id="customModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header border-bottom-0">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-title text-center">
+							<h4 id="modalTitle">Login</h4>
+						</div>
+						<div class="d-flex flex-column text-center">
+							<form id="modalForm" method="POST" action="?action=login">
+
+								
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer d-flex justify-content-center">
+						<div class="signup-section" id="toggleModalButton">
+							Not a member yet? <a class="text-info" id="toggleModalLink">Sign Up</a>.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
 
 
 
@@ -347,20 +340,165 @@
     </div>
   </div>
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.fancybox.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/moment.min.js"></script>
-  <script src="js/daterangepicker.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
 
-  <script src="js/typed.js"></script>
-  
-  <script src="js/custom.js"></script>
+	<script src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.animateNumber.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.waypoints.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.fancybox.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/aos.js')}}"></script>
+    <script src="{{url_for('static', filename='js/moment.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/daterangepicker.js')}}"></script>
+    <script src="{{url_for('static', filename='js/typed.js')}}"></script>
+	<!-- jQuery -->
+	<!-- <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script> -->
+	<!-- Popper JS -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+	<!-- Bootstrap JS -->
+	<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
+
+	<script>
+		const roundtripCheckbox = document.getElementById("roundtrip");
+		const returnDateDiv = document.getElementById("returnDateDiv");
+
+		roundtripCheckbox.addEventListener("change", function () {
+			if (roundtripCheckbox.checked) {
+				returnDateDiv.style.display = "block";
+			} else {
+				returnDateDiv.style.display = "none";
+			}
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+			var autoCloseAlerts = document.querySelectorAll('.auto-close-alert');
+			
+			autoCloseAlerts.forEach(function(alert) {
+				setTimeout(function() {
+					alert.style.display = 'none';
+				}, 5000);
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var isLogin = true;
+		
+			function toggleModal() {
+				isLogin = !isLogin;
+				if (isLogin) {
+					$('#modalTitle').text('Login');
+					$('#modalForm').html(`
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email1" id="email1" placeholder="Your email address..." required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password1" id="password1" placeholder="Your password..." required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Login</button>
+					`);
+					$('#modalForm').attr('action', '?action=login');
+					$('#toggleModalLink').text('Sign Up');
+					$('#submitButton').text('Login');
+				} else {
+					$('#modalTitle').text('Register');
+					$('#modalForm').html(`
+						<label class="form-label">Date of Birth</label>
+						<div class="form-group">
+							<input type="date" class="form-control" name="dob" id="dob" placeholder="Date of Birth" required autocomplete="off">
+						</div>
+						<label class="form-label">Full Name</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required autocomplete="off">
+						</div>
+						<label class="form-label">Phone Number</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="Phone Number" required autocomplete="off">
+						</div>
+						<label class="form-label">Age</label>
+						<div class="form-group">
+							<input type="number" class="form-control" name="age" id="age" placeholder="Age" required autocomplete="off">
+						</div>
+						<label class="form-label">Gender</label>
+						<select class="form-control" name="gender" id="gender" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email2" id="email2"placeholder="Email address" required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password2" id="password2" placeholder="Password" required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Register</button>
+					`);
+					$('#modalForm').attr('action', '?action=register');
+					$('#toggleModalLink').text('Log In');
+					$('#submitButton').text('Register');
+				}
+			}
+		
+			$('#loginButton').on('click', function() {
+				isLogin = true;
+				toggleModal();
+				$('#customModal').modal('show');
+			});
+		
+			$('#toggleModalButton').on('click', function() {
+				toggleModal();
+			});
+		
+			
+			$('#customModal').on('show.bs.modal', function () {
+				toggleModal();
+			});
+		
+			$('#submitButton').on('click', function () {
+				if (isLogin) {
+					var email = $('#email1').val();
+					var password = $('#password1').val();
+					
+				} else {
+					var dob = $('#dob').val();
+
+					isLogin = true;
+            		toggleModal();
+				}
+				$('#customModal').modal('hide');
+			});
+		
+			<!-- $('#customModal').modal('show'); -->
+		});
+
+		$(function() {
+			var typed2 = new Typed('.typed-words2', {
+				strings: ["Hello, "," こんにちは –,		"," Halo, 	", " 안녕하세요, 	", " 你好, 	", "Bonjour,	 "],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+				}
+
+			});
+
+		})
+
+
+	</script>
+	<script src="{{url_for('static', filename='js/custom.js')}}"></script>
 
 </body>
 
