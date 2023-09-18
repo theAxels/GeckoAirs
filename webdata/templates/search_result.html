@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.png')}}">
 
 	<title>Available Flights</title>
 
@@ -64,6 +64,11 @@
 
 	<nav class="site-nav">
 		<div class="container">
+			{% if current_user.is_authenticated %}
+				<div class="user-profile">
+					<b><span class="typed-words2"></span>	{{current_user.name}}</b>
+				</div>
+			{% endif %}
 			<div class="site-navigation">
 				<a href="{{url_for('main.index')}}" class="logo m-0">Gecko<span class="text-primary">.</span>Air</a>
 
@@ -101,7 +106,7 @@
 
     <div id="container-search">
 		<!--<div id="filter-container">-->
-			<form class="form" id="filter-container" ?action=search>
+			<form class="form" method="POST" action="?action=search" id="searchForm">
 				<div class="form-group">
 					<div class="custom-control custom-switch">
 						<input type="checkbox" class="custom-control-input" id="roundtrip" name="round-trip">
@@ -113,10 +118,10 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<span class="form-label">Flying from</span>
-							<select name="fromCity" id="fromCity" class="form-control custom-select" required>
-								<option value="">Select Departure City</option>
+							<select name="fromCity" id="fromCity" class="form-control custom-select">
+								<option>Select Departure City</option>
 								{% for city in cities %}
-									<option value="{{ city.cityID }}">{{ city.city_name }}</option>
+									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
 								{% endfor %}
 							</select>
 							
@@ -128,7 +133,7 @@
 							<select name="toCity" id="toCity" class="form-control custom-select" required>
 								<option value="">Select Arival City</option>
 								{% for city in cities %}
-									<option value="{{ city.cityID }}">{{ city.city_name }}</option>
+									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -137,14 +142,14 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<span class="form-label">Departing</span>
-							<input class="form-control" type="date"  name="departing" required>
+							<span class="form-label">Departing Date</span>
+							<input class="form-control" type="date"  name="departing" id="departing" required>
 						</div>
 					</div>
 					<div id="returnDateDiv" class="col-md-12" style="display: none;">
 						<div class="form-group">
-							<span class="form-label">Returning</span>
-							<input class="form-control" type="date" required>
+							<span class="form-label">Returning Date</span>
+							<input class="form-control" type="date">
 						</div>
 					</div>
 				</div>
@@ -174,10 +179,10 @@
 					<div class="col-md-8">
 						<div class="form-group">
 							<span class="form-label">Travel class</span>
-							<select name="seattype" id="seattype" class="form-control custom-select" required>
+							<select name="seattype" id="seattype" class="form-control custom-select">
 								<option value="">Select Travel Class</option>
 								{% for seattype in seattypes %}
-									<option value="{{ seattype.seatTypeID }}">{{ seattype.seat_type_name }} Class</option>
+									<option value="{{ seattype.seat_type_id }}">{{ seattype.seat_type_name }} Class</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -189,179 +194,50 @@
 					</div>
 				</div>
 			</form>
-			
-			<!--<span class="form-label">Flying from</span>
-			<select name="from" id="" class="form-control custom-select">
-				<option value="">City</option>
-				<option value="">Pekanbaru</option>
-				<option value="">Peru</option>
-				<option value="">Japan</option>
-				<option value="">Thailand</option>
-				<option value="">Brazil</option>
-				<option value="">United States</option>
-				<option value="">Israel</option>
-				<option value="">China</option>
-				<option value="">Russia</option>
-			</select>
 
-			<br>
-
-			<span class="form-label">Flying to</span>
-			<select name="to" id="" class="form-control custom-select">
-				<option value="">City</option>
-				<option value="">Pekanbaru</option>
-				<option value="">Peru</option>
-				<option value="">Japan</option>
-				<option value="">Thailand</option>
-				<option value="">Brazil</option>
-				<option value="">United States</option>
-				<option value="">Israel</option>
-				<option value="">China</option>
-				<option value="">Russia</option>
-			</select>
-			
-			<br>
-			
-			<span class="form-label">Seat Type</span>
-			<select class="form-control">
-				<option value="0">Seat Type</option>
-				<option value="1">Economy class</option>
-				<option value="2">Business class</option>
-				<option value="3">First class</option>
-			</select>
-			<span class="select-arrow"></span>
-			
-			<br>
-
-			<div class="row">
-				<div class="col-md-12">
-					<div class="form-group">
-						<span class="form-label">Departing</span>
-						<input class="form-control" type="date" required>
-					</div>
-				</div>
-
-				<br>
-
-				<div class="col-md-12">
-					<div class="form-group">
-						<span class="form-label">Returning</span>
-						<input class="form-control" type="date" required>
-					</div>
-				</div>
-
-			</div> -->
-		<!--</div> -->
 
         <div id="results-container">
 			<div id="availability">
 				<p id="avail">Available Flights</p>
 			</div>
             <div id="results-scrollable">
-                <div class="results" id="result1">
-					<div class="airline">
-						<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
-						<span class="airline-name">Garuda Indonesia</span>
-					</div>
-					<br>
-					<div class="details">
-						<div class="dep-arr-details">
-							<div class="departure">
-								<span class="time" id="departure-time">16:00</span>
-								<span class="city" id="departure-city">CGK</span>
-							</div>
-							<div class="duration-dash">
-								<span class="duration">1h 50m</span>
-								<div id="images">
-									<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
-									<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
+                {% for flight in flights %}
+					<form class="results" id="result1" method="GET" action="?action=book">
+						<div class="airline">
+							<span id="flightId" name="flightId"style="display:none;"></span>
+							<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
+							<span class="airline-name">{{ flight['airline_name'] }}</span>
+						</div>
+						<br>
+						<div class="details">
+							<div class="dep-arr-details">
+								<div class="departure">
+									<span class="time" id="departure-time">{{ flight['Departure Time'] }}</span>
+									<span class="city" id="departure-city">{{ flight['Departure City'] }}</span>
+								</div>
+								<div class="duration-dash">
+									<span class="duration">{{ flight['Duration'] }}</span>
+									<div id="images">
+										<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
+										<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
+									</div>
+								</div>
+								<div class="arrival">
+									<span class="time" id="arrival-time">{{ flight['Arrival Time'] }}</span>
+									<span class="city" id="arrival-city">{{ flight['Destination City'] }}</span>
 								</div>
 							</div>
-							<div class="arrival">
-								<span class="time" id="arrival-time">17:50</span>
-								<span class="city" id="arrival-city">DPS</span>
+							<div class="flight-price">
+								<span class="price">IDR {{ flight['price'] }}</span> <p id="pax">/pax</p>
 							</div>
 						</div>
-						<div class="flight-price">
-							<span class="price">IDR 999,000 </span> <p id="pax">/pax</p>
+	
+						<div class="book-button">
+							<button type="submit" class="bn-button">Book</button>
 						</div>
-					</div>
-
-					<div class="book-button">
-						<button type="button" class="bn-button">Book</button>
-					</div>
-
-				</div>
-
-				<div class="results" id="result1">
-					<div class="airline">
-						<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
-						<span class="airline-name">Garuda Indonesia</span>
-					</div>
-					<br>
-					<div class="details">
-						<div class="dep-arr-details">
-							<div class="departure">
-								<span class="time" id="departure-time">16:00</span>
-								<span class="city" id="departure-city">CGK</span>
-							</div>
-							<div class="duration-dash">
-								<span class="duration">1h 50m</span>
-								<div id="images">
-									<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
-									<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
-								</div>
-							</div>
-							<div class="arrival">
-								<span class="time" id="arrival-time">17:50</span>
-								<span class="city" id="arrival-city">DPS</span>
-							</div>
-						</div>
-						<div class="flight-price">
-							<span class="price">IDR 999,000 </span> <p id="pax">/pax</p>
-						</div>
-					</div>
-
-					<div class="book-button">
-						<button type="button" class="bn-button">Book</button>
-					</div>
-
-				</div>
-
-				<div class="results" id="result1">
-					<div class="airline">
-						<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
-						<span class="airline-name">Garuda Indonesia</span>
-					</div>
-					<br>
-					<div class="details">
-						<div class="dep-arr-details">
-							<div class="departure">
-								<span class="time" id="departure-time">16:00</span>
-								<span class="city" id="departure-city">CGK</span>
-							</div>
-							<div class="duration-dash">
-								<span class="duration">1h 50m</span>
-								<div id="images">
-									<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
-									<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
-								</div>
-							</div>
-							<div class="arrival">
-								<span class="time" id="arrival-time">17:50</span>
-								<span class="city" id="arrival-city">DPS</span>
-							</div>
-						</div>
-						<div class="flight-price">
-							<span class="price">IDR 999,000 </span> <p id="pax">/pax</p>
-						</div>
-					</div>
-
-					<div class="book-button">
-						<button type="button" class="bn-button">Book</button>
-					</div>
-
-				</div>
+	
+					</form>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -589,6 +465,25 @@
 
 			});
 
+		})
+		$(document).ready(function(){
+			var url = window.location.href;
+
+			var urlParams = new URLSearchParams(url.split('?')[1]);
+			var fromCityID = urlParams.get('fromCityID');
+			var toCityID = urlParams.get('toCityID');
+			var departing = urlParams.get('departing');
+			var seattypeID = urlParams.get('seattypeID');
+
+			console.log('fromCityID:', fromCityID);
+			console.log('toCityID:', toCityID);
+			console.log('departing:', departing);
+			console.log('seattypeID:', seattypeID);
+
+			$('#fromCity').val(fromCityID);
+			$('#toCity').val(toCityID);
+			$('#departing').val(departing);
+			$('#seattype').val(seattypeID);
 		})
 	</script>
 	<script src="{{url_for('static', filename='js/custom.js')}}"></script>

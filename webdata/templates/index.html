@@ -72,7 +72,7 @@
 
 				<ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
 					<li class="active"><a href="{{url_for('main.index')}}">Home</a></li>
-					<li><a href="{{url_for('main.search_result')}}">About</a></li>
+					<li><a href="{{url_for('main.result')}}">About</a></li>
 					{% if current_user.is_authenticated %}
 						<li>
 							<a href="{{url_for('main.logout')}}">Logout | 
@@ -115,10 +115,9 @@
 				<div class="col-lg-7">
 					<div class="intro-wrap">
 						<h1 class="mb-5"><span class="d-block">Let's Enjoy Your</span> Trip In <span class="typed-words"></span></h1>
-
 						<div class="row">
 							<div class="col-10">
-								<form class="form" ?action=search>
+								<form class="form" method="POST" action="?action=search" id="searchForm">
 									<div class="form-group">
 										<div class="custom-control custom-switch">
 											<input type="checkbox" class="custom-control-input" id="roundtrip" name="round-trip">
@@ -130,10 +129,10 @@
 										<div class="col-md-12">
 											<div class="form-group">
 												<span class="form-label">Flying from</span>
-												<select name="fromCity" id="fromCity" class="form-control custom-select" required>
-													<option value="">Select Departure City</option>
+												<select name="fromCity" id="fromCity" class="form-control custom-select">
+													<option>Select Departure City</option>
 													{% for city in cities %}
-														<option value="{{ city.cityID }}">{{ city.city_name }}</option>
+														<option value="{{ city.city_id }}">{{ city.city_name }}</option>
 													{% endfor %}
 												</select>
 												
@@ -145,7 +144,7 @@
 												<select name="toCity" id="toCity" class="form-control custom-select" required>
 													<option value="">Select Arival City</option>
 													{% for city in cities %}
-														<option value="{{ city.cityID }}">{{ city.city_name }}</option>
+														<option value="{{ city.city_id }}">{{ city.city_name }}</option>
 													{% endfor %}
 												</select>
 											</div>
@@ -154,14 +153,14 @@
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group">
-												<span class="form-label">Departing</span>
-												<input class="form-control" type="date"  name="departing" required>
+												<span class="form-label">Departing Date</span>
+												<input class="form-control" type="date"  name="departing" id='departing'required>
 											</div>
 										</div>
 										<div id="returnDateDiv" class="col-md-12" style="display: none;">
 											<div class="form-group">
-												<span class="form-label">Returning</span>
-												<input class="form-control" type="date" required>
+												<span class="form-label">Returning Date</span>
+												<input class="form-control" type="date">
 											</div>
 										</div>
 									</div>
@@ -191,10 +190,10 @@
 										<div class="col-md-8">
 											<div class="form-group">
 												<span class="form-label">Travel class</span>
-												<select name="seattype" id="seattype" class="form-control custom-select" required>
+												<select name="seattype" id="seattype" class="form-control custom-select">
 													<option value="">Select Travel Class</option>
 													{% for seattype in seattypes %}
-														<option value="{{ seattype.seatTypeID }}">{{ seattype.seat_type_name }} Class</option>
+														<option value="{{ seattype.seat_type_id }}">{{ seattype.seat_type_name }} Class</option>
 													{% endfor %}
 												</select>
 											</div>
@@ -572,6 +571,8 @@
 			});
 
 		})
+
+
 	</script>
 	<script src="{{url_for('static', filename='js/custom.js')}}"></script>
 </body>

@@ -50,6 +50,7 @@ class Flight(db.Model):
     seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
     available_seats = db.Column(db.Integer, nullable=False)
     
+
     @property
     def route_detail(self):
         return Route.query.get(self.route_id)
