@@ -1,0 +1,189 @@
+body{
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    width: 100vw;
+    height: max-content;
+    background: #6998AB;
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track{
+    background: #6998ab90;
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(177, 208, 224); ;
+    border-radius: 15px;
+}
+
+#container-search{
+    background-color: white;
+    margin-top: 15vh;
+    display: flex;
+    flex-direction: row;
+    height: 85vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+#filter-container{
+    padding: 0 3%;
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0px 2px 10px 1px #b1afaf;
+    border-width: 0 3px 0 0;
+    border-color: rgb(164, 157, 157);
+    
+    /* border-style: solid; */
+}
+
+#results-container{
+    padding-top: 10px;
+    /* background-color: white; */
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#availability{
+    height: 30%;
+}
+
+#avail{
+    font-size: 2em;
+    font-family: 'Inter' sans-serif;
+    font-weight: bold;
+    color: #6998AB;
+    margin: 10px 0 30px 0;
+}
+
+#results-scrollable{
+    width: 100%;
+    height: 400%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    justify-self: start;
+    overflow-y: scroll;
+}
+
+.results{
+    display: flex;
+    flex-direction: column;
+    padding: 2% 2%;
+    justify-content: center;
+    align-items: start;
+    width: 90%;
+    height: max-content;
+    border-radius: 15px;
+    box-shadow: 0px 2px 10px 1px #b1afaf;
+    margin-bottom: 30px;
+}
+
+.results img{
+    width: 8%;
+    height: max-content;
+    object-fit: contain;
+}
+
+.details{
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: start;
+    width: 100%;
+}
+
+.dep-arr-details{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+    padding-right: 25%;
+}
+
+.time{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.duration-dash{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.duration-dash #images{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#plane-img{
+    /* height: 10%; */
+    width: 1vw;
+}
+
+#dash-img{
+    width: 80%;
+    height: 3vh;
+    object-fit: fill;
+}
+
+.duration{
+    font-size: smaller;
+}
+
+.flight-price{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: end;
+    align-items: center;
+}
+
+.price{
+    font-weight: bolder;
+    color: #1A374D;
+    font-size: 1.5em;
+}
+
+#pax{
+    color: #777777;
+    margin-bottom: 0;
+}
+
+.book-button{
+    display: flex;
+    justify-content: end;
+    width: 100%;
+}
+
+.bn-button{
+    width: 10%;
+    background-color: #1A374D;
+    border-radius: 15px;
+    justify-self: end;
+    font-size: 1em;
+    font-family: "Inter" sans-serif;
+    color: white;
+}
