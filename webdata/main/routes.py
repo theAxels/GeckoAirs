@@ -100,14 +100,14 @@ def result():
             
             if check : 
                 flash('Email for registration is not valid or already used', 'danger')
-                redirect(url_for('main.result'))
+                return redirect(url_for('main.result'))
             
             hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
             user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
             db.session.add(user)
             db.session.commit()
             flash('Accounts created successfully! please login ', 'success')
-            redirect(url_for('main.result'))
+            return redirect(url_for('main.result'))
         if action == 'search':
             fromCityID = request.form.get('fromCity') 
             toCityID = request.form.get('toCity')
@@ -119,6 +119,7 @@ def result():
         if action == 'book':
             if not current_user.is_authenticated:
                 flash('Need login to book flight !', 'warning')
+                return redirect(url_for('main.result'))
             userId = current_user.user_id
             flightId = request.form.get('flight_id')
             booking_status = 'Unpaid'
@@ -257,21 +258,23 @@ def about():
             
             if check : 
                 flash('Email for registration is not valid or already used', 'danger')
-                redirect(url_for('main.about'))
+                return redirect(url_for('main.about'))
             
             hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
             user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
             db.session.add(user)
             db.session.commit()
             flash('Accounts created successfully! please login ', 'success')
-            redirect(url_for('main.about'))
+            return redirect(url_for('main.about'))
     return render_template('about.html')
 
 
 
 @main.route('/manage_bookings',  methods=['GET', 'POST'])
-@login_required
 def manage():
+    if not current_user.is_authenticated:
+        flash('Need login to book flight !', 'warning')
+        return redirect(url_for('main.index'))
     query = text('''
        SELECT b.booking_id, f.flight_number, a.airline_name, c1.city_name,  DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price', b.booking_status
         FROM bookings b
@@ -300,7 +303,6 @@ def manage():
             'Duration': result[5],
             'Destination City': result[6],
             'Arrival Time': result[7],
-            # 'payment_amount' : result[8],
             'price' : formatted_price,
             'booking_status' : result[9]
         }
