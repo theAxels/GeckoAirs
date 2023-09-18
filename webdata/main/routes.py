@@ -223,6 +223,49 @@ def pay(booking_id):
     print(current_time)
     return render_template('payment.html', booking=booking, current_time=current_time)
 
+@main.route('/about', methods=['GET', 'POST'])
+def about():
+    if request.method == 'POST':
+        action = request.args.get('action')
+        if action == 'login':
+            email = request.form.get('email1')
+            # print(email)
+            user = User.query.filter_by(email=email).first()
+            # print(user)
+            if user :
+                password = request.form.get('password1')
+                check = bcrypt.check_password_hash(user.password, password)
+                
+                if check == True:
+                    login_user(user)
+                    flash("User has been logged in succesfully!", 'success')
+                    return redirect(url_for('main.result'))
+                flash("Login Failed. Incorrect  password!", 'danger')
+                return redirect(url_for('main.result'))
+            flash("Login Failed. Unfound  email!", 'danger')
+            return redirect(url_for('main.about'))
+        if action == 'register':
+            dob = request.form.get('dob')
+            name = request.form.get('name')
+            phone_number = request.form.get('phone_number')
+            gender = request.form.get('gender')
+            email = request.form.get('email2')
+            password = request.form.get('password2')
+            
+            check = User.query.filter_by(email = email).first()
+            
+            if check : 
+                flash('Email for registration is not valid or already used', 'danger')
+                redirect(url_for('main.about'))
+            
+            hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
+            user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
+            db.session.add(user)
+            db.session.commit()
+            flash('Accounts created successfully! please login ', 'success')
+            redirect(url_for('main.about'))
+    return render_template('about.html')
+
 '''
 lagi di halaman html 
 url_for('main.pay', booking_id=booking.booking_id)

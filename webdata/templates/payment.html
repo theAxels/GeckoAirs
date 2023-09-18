@@ -14,9 +14,19 @@
     <title>GECO PAYMENT</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/stylepay.css')}}">
 </head>
+<style>
+    body{
+        background-color: #6998AB;
+    }
+</style>
+<body>
 
 <div class="container"> 
-    
+    <a href="{{url_for('main.result')}}" style="text-decoration: none; color: white;">
+        <button id="buttonPay" class="mb-3" style="width: 120px;">
+                <span class="fas fa-arrow-left"></span> Back
+        </button>
+    </a>
     <div class="row m-0"> 
         <div class="col-md-7 col-12"> 
             <div class="row"> 
@@ -232,6 +242,7 @@
         </div> 
     </div> 
 </div>
+</body>
 
 <div id="asynchronous"></div>
 <script src="{{url_for('static', filename='js/scriptPayment.js')}}"></script>
