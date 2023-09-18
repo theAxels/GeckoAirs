@@ -201,43 +201,49 @@
 				<p id="avail">Available Flights</p>
 			</div>
             <div id="results-scrollable">
-                {% for flight in flights %}
-					<form class="results" id="result1" method="GET" action="?action=book">
-						<div class="airline">
-							<span id="flightId" name="flightId"style="display:none;"></span>
-							<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
-							<span class="airline-name">{{ flight['airline_name'] }}</span>
-						</div>
-						<br>
-						<div class="details">
-							<div class="dep-arr-details">
-								<div class="departure">
-									<span class="time" id="departure-time">{{ flight['Departure Time'] }}</span>
-									<span class="city" id="departure-city">{{ flight['Departure City'] }}</span>
-								</div>
-								<div class="duration-dash">
-									<span class="duration">{{ flight['Duration'] }}</span>
-									<div id="images">
-										<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
-										<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
+				{% if flights %}
+					{% for flight in flights %}
+						<form class="results" id="result1" method="POST" action="?action=book">
+							<div class="airline">
+								<input type='hidden' id="flightId" name="flight_id" value="{{ flight['flight_id'] }}" style="display:none;"></input>
+								<input type='hidden' id="seattypeId" name="seat_type_id" value="{{ flight['seat_type_id'] }}" style="display:none;"></input>
+								<input type='hidden' id="payment_amount" name="payment_amount" value="{{ flight['payment_amount'] }}" style="display:none;"></input>
+								<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
+								<span class="airline-name">{{ flight['airline_name'] }}</span>
+							</div>
+							<br>
+							<div class="details">
+								<div class="dep-arr-details">
+									<div class="departure">
+										<span class="time" id="departure-time">{{ flight['Departure Time'] }}</span>
+										<span class="city" id="departure-city">{{ flight['Departure City'] }}</span>
+									</div>
+									<div class="duration-dash">
+										<span class="duration">{{ flight['Duration'] }}</span>
+										<div id="images">
+											<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
+											<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
+										</div>
+									</div>
+									<div class="arrival">
+										<span class="time" id="arrival-time">{{ flight['Arrival Time'] }}</span>
+										<span class="city" id="arrival-city">{{ flight['Destination City'] }}</span>
 									</div>
 								</div>
-								<div class="arrival">
-									<span class="time" id="arrival-time">{{ flight['Arrival Time'] }}</span>
-									<span class="city" id="arrival-city">{{ flight['Destination City'] }}</span>
+								<div class="flight-price">
+									<span class="price">IDR {{ flight['price'] }}</span> <p id="pax">/pax</p>
 								</div>
 							</div>
-							<div class="flight-price">
-								<span class="price">IDR {{ flight['price'] }}</span> <p id="pax">/pax</p>
+		
+							<div class="book-button">
+								<button type="submit" class="bn-button">Book</button>
 							</div>
-						</div>
-	
-						<div class="book-button">
-							<button type="submit" class="bn-button">Book</button>
-						</div>
-	
-					</form>
-				{% endfor %}
+						</form>
+					{% endfor %}
+				{% else %}
+					<img src="{{url_for('static', filename='images/no_flight_img.jpg')}}" id="no-flight-img" alt="">
+					<p>Sorry, there are no flights available for this route.</p>
+				{% endif%}
 			</div>
 		</div>
 	</div>
