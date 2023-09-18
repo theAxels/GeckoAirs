@@ -121,7 +121,7 @@ def result():
                 flash('Need login to book flight !', 'warning')
             userId = current_user.user_id
             flightId = request.form.get('flight_id')
-            booking_status = 'unpaid'
+            booking_status = 'Unpaid'
             seattypeID = request.form.get('seat_type_id')
             payment_amount = request.form.get('payment_amount')
             booking_date = datetime.datetime.now()
@@ -223,6 +223,7 @@ def pay(booking_id):
     print(current_time)
     return render_template('payment.html', booking=booking, current_time=current_time)
 
+
 @main.route('/about', methods=['GET', 'POST'])
 def about():
     if request.method == 'POST':
@@ -265,6 +266,55 @@ def about():
             flash('Accounts created successfully! please login ', 'success')
             redirect(url_for('main.about'))
     return render_template('about.html')
+
+
+
+@main.route('/manage_bookings',  methods=['GET', 'POST'])
+@login_required
+def manage():
+    query = text('''
+       SELECT b.booking_id, f.flight_number, a.airline_name, c1.city_name,  DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price', b.booking_status
+        FROM bookings b
+        JOIN flights f ON f.flight_id=b.flight_id
+        JOIN airlines a ON a.airline_id=f.airline_id
+        JOIN seat_types st ON st.seat_type_id=f.airline_id
+        JOIN routes r ON r.route_id=f.route_id
+        JOIN cities c1 ON c1.city_id=r.origin_city_id
+        JOIN cities c2 ON c2.city_id=r.destination_city_id;
+    ''')
+
+    # Execute the query and fetch the results
+    results = db.session.execute(query)
+    # books = [result for result in results]
+    books = []
+    for result in results:
+        total = result[8]
+        formatted_price = str(locale.format_string("%.0f", total, grouping=True))
+        formatted_price = formatted_price.replace(',', '.')
+        book = {
+            'booking_id' : result[0],
+            'flight_number': result[1],
+            'airline_name': result[2],
+            'Departure City': result[3],
+            'Departure Time': result[4],
+            'Duration': result[5],
+            'Destination City': result[6],
+            'Arrival Time': result[7],
+            # 'payment_amount' : result[8],
+            'price' : formatted_price,
+            'booking_status' : result[9]
+        }
+        books.append(book)
+    print(books)
+    
+    if request.method == 'POST':
+        action = request.args.get('action')
+        if action == 'pay':
+            booking_id = request.form.get('booking_id')
+            print(booking_id)
+            return redirect(url_for('main.pay', booking_id=booking_id))
+    
+    return render_template('manage_bookings.html', books = books)
 
 '''
 lagi di halaman html 

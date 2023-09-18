@@ -74,8 +74,8 @@
 
 				<ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
 					<li class="active"><a href="{{url_for('main.index')}}">Home</a></li>
-					<li><a href="{{url_for('main.about')}}">About</a></li>
 					<li><a href="{{url_for('main.manage')}}">Manage Bookings</a></li>
+					<li><a href="about.html">About</a></li>
 					{% if current_user.is_authenticated %}
 						<li>
 							<a href="{{url_for('main.logout')}}">Logout | 
@@ -104,150 +104,103 @@
 		</div>
 	</nav>
 
-
-    <div id="container-search">
-		<!--<div id="filter-container">-->
-			<form class="form" method="POST" action="?action=search" id="searchForm">
-				<div class="form-group">
-					<div class="custom-control custom-switch">
-						<input type="checkbox" class="custom-control-input" id="roundtrip" name="round-trip">
-						<label class="custom-control-label" for="roundtrip">Roundtrip ?</label>
-					</div>
-				</div>																								
-				
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<span class="form-label">Flying from</span>
-							<select name="fromCity" id="fromCity" class="form-control custom-select">
-								<option>Select Departure City</option>
-								{% for city in cities %}
-									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
-								{% endfor %}
-							</select>
-							
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class="form-group">
-							<span class="form-label">Flying to</span>
-							<select name="toCity" id="toCity" class="form-control custom-select" required>
-								<option value="">Select Arival City</option>
-								{% for city in cities %}
-									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
+	<div id="container-search">
+		<div id="filters-container">
+			{% if books %}
+				<div class="centered">
+					<span><b> - All bookings - </b></span>
 				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group">
-							<span class="form-label">Departing Date</span>
-							<input class="form-control" type="date"  name="departing" id="departing" required>
-						</div>
-					</div>
-					<div id="returnDateDiv" class="col-md-12" style="display: none;">
-						<div class="form-group">
-							<span class="form-label">Returning Date</span>
-							<input class="form-control" type="date">
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<span class="form-label">Adults (18+)</span>
-							<select class="form-control" name="">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-							</select>
-							<span class="select-arrow"></span>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<span class="form-label">Children (0-17)</span>
-							<select class="form-control">
-								<option>0</option>
-								<option>1</option>
-								<option>2</option>
-							</select>
-							<span class="select-arrow"></span>
-						</div>
-					</div>
-					<div class="col-md-8">
-						<div class="form-group">
-							<span class="form-label">Travel class</span>
-							<select name="seattype" id="seattype" class="form-control custom-select">
-								<option value="">Select Travel Class</option>
-								{% for seattype in seattypes %}
-									<option value="{{ seattype.seat_type_id }}">{{ seattype.seat_type_name }} Class</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
-				</div>
-				<div class="row align-items-center">
-					<div class="col-sm-12 col-md-6 mb-3 col-lg-4 ml-auto">
-						<input type="submit" class="btn btn-primary btn-block" value="Search">
-					</div>
-				</div>
-			</form>
-
-
-        <div id="results-container">
-			<div id="availability">
-				<p id="avail">Available Flights</p>
-			</div>
-            <div id="results-scrollable">
-				{% if flights %}
-					{% for flight in flights %}
-						<form class="results" id="result1" method="POST" action="?action=book">
+				{% for book in books %}
+					{% if book['booking_status'] == 'Paid' :%}
+						<form class="results" id="result1" method="POST" action="?action=pay">
+							<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
 							<div class="airline">
-								<input type='hidden' id="flightId" name="flight_id" value="{{ flight['flight_id'] }}" style="display:none;"></input>
-								<input type='hidden' id="seattypeId" name="seat_type_id" value="{{ flight['seat_type_id'] }}" style="display:none;"></input>
-								<input type='hidden' id="payment_amount" name="payment_amount" value="{{ flight['payment_amount'] }}" style="display:none;"></input>
+								<input type='hidden' id="bookingId" name="booking_id" value="{{ book['booking_id'] }}" style="display:none;"></input>
+								<input type='hidden' id="flightNumber" name="flight_number" value="{{ book['flight_number'] }}" style="display:none;"></input>
 								<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
-								<span class="airline-name">{{ flight['airline_name'] }}</span>
+								<span class="airline-name">{{ book['airline_name'] }}</span>
 							</div>
 							<br>
 							<div class="details">
 								<div class="dep-arr-details">
 									<div class="departure">
-										<span class="time" id="departure-time">{{ flight['Departure Time'] }}</span>
-										<span class="city" id="departure-city">{{ flight['Departure City'] }}</span>
+										<span class="time" id="departure-time">{{ book['Departure Time'] }}</span>
+										<span class="city" id="departure-city">{{ book['Departure City'] }}</span>
 									</div>
 									<div class="duration-dash">
-										<span class="duration">{{ flight['Duration'] }}</span>
+										<span class="duration">{{ book['Duration'] }}</span>
 										<div id="images">
 											<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
 											<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
 										</div>
 									</div>
 									<div class="arrival">
-										<span class="time" id="arrival-time">{{ flight['Arrival Time'] }}</span>
-										<span class="city" id="arrival-city">{{ flight['Destination City'] }}</span>
+										<span class="time" id="arrival-time">{{ book['Arrival Time'] }}</span>
+										<span class="city" id="arrival-city">{{ book['Destination City'] }}</span>
 									</div>
 								</div>
 								<div class="flight-price">
-									<span class="price">IDR {{ flight['price'] }}</span> <p id="pax">/pax</p>
+									<span class="price">IDR {{ book['price'] }}</span> <p id="pax">,00</p>
 								</div>
 							</div>
-		
+
 							<div class="book-button">
-								<button type="submit" class="bn-button">Book</button>
+								<button type="submit" class="bn-button">Pay</button>
 							</div>
 						</form>
-					{% endfor %}
-				{% else %}
-					<img src="{{url_for('static', filename='images/no_flight_img.jpg')}}" id="no-flight-img" alt="">
-					<p>Sorry, there are no flights available for this route.</p>
-				{% endif%}
-			</div>
+					{% endif %}
+				{% endfor %}
+				<div class="centered">
+					<span><b>- Unpaid bookings -</b></span>
+				</div>
+				{% for book in books %}
+					{% if book['booking_status'] == 'Unpaid' :%}
+						<form class="results" id="result1" method="POST" action="?action=pay">
+							<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
+							<div class="airline">
+								<input type='hidden' id="bookingId" name="booking_id" value="{{ book['booking_id'] }}" style="display:none;"></input>
+								<input type='hidden' id="flightNumber" name="flight_number" value="{{ book['flight_number'] }}" style="display:none;"></input>
+								<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
+								<span class="airline-name">{{ book['airline_name'] }}</span>
+							</div>
+							<br>
+							<div class="details">
+								<div class="dep-arr-details">
+									<div class="departure">
+										<span class="time" id="departure-time">{{ book['Departure Time'] }}</span>
+										<span class="city" id="departure-city">{{ book['Departure City'] }}</span>
+									</div>
+									<div class="duration-dash">
+										<span class="duration">{{ book['Duration'] }}</span>
+										<div id="images">
+											<img src="{{url_for('static', filename='images/dash.png')}}" id="dash-img" alt="">
+											<img src="{{url_for('static', filename='images/plane.png')}}" id="plane-img" alt="">
+										</div>
+									</div>
+									<div class="arrival">
+										<span class="time" id="arrival-time">{{ book['Arrival Time'] }}</span>
+										<span class="city" id="arrival-city">{{ book['Destination City'] }}</span>
+									</div>
+								</div>
+								<div class="flight-price">
+									<span class="price">IDR {{ book['price'] }}</span> <p id="pax">,00</p>
+								</div>
+							</div>
+
+							<div class="book-button">
+								<button type="submit" class="bn-button">Pay</button>
+							</div>
+						</form>
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<img src="{{url_for('static', filename='images/no_flight_img.jpg')}}" id="no-flight-img" alt="">
+				<p>There is no bookings!!</p>
+			{% endif%}
 		</div>
 	</div>
+
+    
 
     <div class="site-footer">
 		<div class="inner first">
@@ -340,4 +293,157 @@
 </body>
 </html>
 
-	
+	<script>
+		const roundtripCheckbox = document.getElementById("roundtrip");
+		const returnDateDiv = document.getElementById("returnDateDiv");
+
+		roundtripCheckbox.addEventListener("change", function () {
+			if (roundtripCheckbox.checked) {
+				returnDateDiv.style.display = "block";
+			} else {
+				returnDateDiv.style.display = "none";
+			}
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+			var autoCloseAlerts = document.querySelectorAll('.auto-close-alert');
+			
+			autoCloseAlerts.forEach(function(alert) {
+				setTimeout(function() {
+					alert.style.display = 'none';
+				}, 5000);
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var isLogin = true;
+		
+			function toggleModal() {
+				isLogin = !isLogin;
+				if (isLogin) {
+					$('#modalTitle').text('Login');
+					$('#modalForm').html(`
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email1" id="email1" placeholder="Your email address..." required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password1" id="password1" placeholder="Your password..." required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Login</button>
+					`);
+					$('#modalForm').attr('action', '?action=login');
+					$('#toggleModalLink').text('Sign Up');
+					$('#submitButton').text('Login');
+				} else {
+					$('#modalTitle').text('Register');
+					$('#modalForm').html(`
+						<label class="form-label">Date of Birth</label>
+						<div class="form-group">
+							<input type="date" class="form-control" name="dob" id="dob" placeholder="Date of Birth" required autocomplete="off">
+						</div>
+						<label class="form-label">Full Name</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required autocomplete="off">
+						</div>
+						<label class="form-label">Phone Number</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="Phone Number" required autocomplete="off">
+						</div>
+						<label class="form-label">Age</label>
+						<div class="form-group">
+							<input type="number" class="form-control" name="age" id="age" placeholder="Age" required autocomplete="off">
+						</div>
+						<label class="form-label">Gender</label>
+						<select class="form-control" name="gender" id="gender" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email2" id="email2"placeholder="Email address" required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password2" id="password2" placeholder="Password" required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Register</button>
+					`);
+					$('#modalForm').attr('action', '?action=register');
+					$('#toggleModalLink').text('Log In');
+					$('#submitButton').text('Register');
+				}
+			}
+		
+			$('#loginButton').on('click', function() {
+				isLogin = true;
+				toggleModal();
+				$('#customModal').modal('show');
+			});
+		
+			$('#toggleModalButton').on('click', function() {
+				toggleModal();
+			});
+		
+			
+			$('#customModal').on('show.bs.modal', function () {
+				toggleModal();
+			});
+		
+			$('#submitButton').on('click', function () {
+				if (isLogin) {
+					var email = $('#email1').val();
+					var password = $('#password1').val();
+					
+				} else {
+					var dob = $('#dob').val();
+
+					isLogin = true;
+            		toggleModal();
+				}
+				$('#customModal').modal('hide');
+			});
+		
+			<!-- $('#customModal').modal('show'); -->
+		});
+		$(function() {
+			var typed2 = new Typed('.typed-words2', {
+				strings: ["Hello, "," こんにちは –,		"," Halo, 	", " 안녕하세요, 	", " 你好, 	", "Bonjour,	 "],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+				}
+
+			});
+
+		})
+		$(document).ready(function(){
+			var url = window.location.href;
+
+			var urlParams = new URLSearchParams(url.split('?')[1]);
+			var fromCityID = urlParams.get('fromCityID');
+			var toCityID = urlParams.get('toCityID');
+			var departing = urlParams.get('departing');
+			var seattypeID = urlParams.get('seattypeID');
+
+			console.log('fromCityID:', fromCityID);
+			console.log('toCityID:', toCityID);
+			console.log('departing:', departing);
+			console.log('seattypeID:', seattypeID);
+
+			$('#fromCity').val(fromCityID);
+			$('#toCity').val(toCityID);
+			$('#departing').val(departing);
+			$('#seattype').val(seattypeID);
+		})
+	</script>
+	<script src="{{url_for('static', filename='js/custom.js')}}"></script>
