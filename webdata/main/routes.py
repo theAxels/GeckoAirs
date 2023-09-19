@@ -50,7 +50,7 @@ def index():
                 redirect(url_for('main.index'))
             
             hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
-            user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
+            user = User(date_of_birth = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
             db.session.add(user)
             db.session.commit()
             flash('Accounts created successfully! please login ', 'success')
@@ -103,7 +103,7 @@ def result():
                 return redirect(url_for('main.result'))
             
             hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
-            user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
+            user = User(date_of_birth = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
             db.session.add(user)
             db.session.commit()
             flash('Accounts created successfully! please login ', 'success')
@@ -118,7 +118,7 @@ def result():
         
         if action == 'book':
             if not current_user.is_authenticated:
-                flash('Need login to book flight !', 'warning')
+                flash('Need login to book flight !', 'danger')
                 return redirect(url_for('main.result'))
             userId = current_user.user_id
             flightId = request.form.get('flight_id')
@@ -261,7 +261,7 @@ def about():
                 return redirect(url_for('main.about'))
             
             hashed = bcrypt.generate_password_hash(password).decode('UTF-8')
-            user = User(dob = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
+            user = User(date_of_birth = dob,name = name, phone_number = phone_number, gender = gender, email = email, password = hashed)
             db.session.add(user)
             db.session.commit()
             flash('Accounts created successfully! please login ', 'success')
@@ -273,8 +273,9 @@ def about():
 @main.route('/manage_bookings',  methods=['GET', 'POST'])
 def manage():
     if not current_user.is_authenticated:
-        flash('Need login to book flight !', 'warning')
+        flash('Need login to manage book !', 'danger')
         return redirect(url_for('main.index'))
+    userId = current_user.user_id
     query = text('''
        SELECT b.booking_id, f.flight_number, a.airline_name, c1.city_name,  DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price', b.booking_status
         FROM bookings b
@@ -283,11 +284,15 @@ def manage():
         JOIN seat_types st ON st.seat_type_id=f.airline_id
         JOIN routes r ON r.route_id=f.route_id
         JOIN cities c1 ON c1.city_id=r.origin_city_id
-        JOIN cities c2 ON c2.city_id=r.destination_city_id;
+        JOIN cities c2 ON c2.city_id=r.destination_city_id
+        WHERE b.user_id = :user_Id;
     ''')
-
+     # Bind query parameters
+    params = {
+        'user_Id': userId,
+    }
     # Execute the query and fetch the results
-    results = db.session.execute(query)
+    results = db.session.execute(query, params)
     # books = [result for result in results]
     books = []
     for result in results:

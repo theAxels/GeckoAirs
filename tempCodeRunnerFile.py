@@ -1,3 +1,2 @@
 
-        # create_dummy_bookings()
-        # create_dummy_payments()
+    app.run(host='0.0.0.0', port='8800', debug=True)
