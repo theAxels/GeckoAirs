@@ -198,9 +198,11 @@
 
 
         <div id="results-container">
-			<div id="availability">
-				<p id="avail">Available Flights</p>
-			</div>
+			{% if flights %}
+				<div id="availability">
+					<p id="avail">Available Flights</p>
+				</div>
+			{% endif%}
             <div id="results-scrollable">
 				{% if flights %}
 					{% for flight in flights %}
