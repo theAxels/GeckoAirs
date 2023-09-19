@@ -577,7 +577,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
   .hero .slides {
     background: #ffffff;
     max-width: 780px;
-    left: -100px;
+    left: -10px;
     z-index: 0;
     position: relative;
     border-radius: 200px;
@@ -587,6 +587,8 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
     margin-bottom: -200px; }
     @media (max-width: 991.98px) {
       .hero .slides {
+        height: 492px;
+        margin-top : 20px;
         left: 0; } }
     .hero .slides img {
       position: absolute;
