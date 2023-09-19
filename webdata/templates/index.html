@@ -133,7 +133,7 @@
 												<select name="fromCity" id="fromCity" class="form-control custom-select">
 													<option>Select Departure City</option>
 													{% for city in cities %}
-														<option value="{{ city.city_id }}">{{ city.city_name }}</option>
+														<option value="{{ city.city_id }}">{{ city.city_name }} ({{ city.city_code }})</option>
 													{% endfor %}
 												</select>
 												
@@ -145,7 +145,7 @@
 												<select name="toCity" id="toCity" class="form-control custom-select" required>
 													<option value="">Select Arival City</option>
 													{% for city in cities %}
-														<option value="{{ city.city_id }}">{{ city.city_name }}</option>
+														<option value="{{ city.city_id }}">{{ city.city_name }} ({{ city.city_code }})</option>
 													{% endfor %}
 												</select>
 											</div>

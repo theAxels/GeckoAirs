@@ -110,6 +110,7 @@ body{
 }
 
 .results{
+    margin-top: 10px;
     margin-left: 50px;
     display: flex;
     flex-direction: column;

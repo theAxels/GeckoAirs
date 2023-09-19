@@ -147,7 +147,7 @@ def result():
     # return render_template('index.html', cities=cities, seattypes=seattypes)
     
     query = text('''
-        SELECT f.flight_id, a.airline_name, c1.city_name, DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price'
+        SELECT f.flight_id, a.airline_name, c1.city_name, c1.city_code, DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, c2.city_code, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price'
         FROM flights f
         JOIN routes r ON r.route_id = f.route_id
         JOIN airlines a ON a.airline_id = f.airline_id
@@ -170,18 +170,20 @@ def result():
     # flights = [result for result in results]
     flights = []
     for result in results:
-        total = result[7]
+        total = result[9]
         formatted_price = str(locale.format_string("%.0f", total, grouping=True))
         formatted_price = formatted_price.replace(',', '.')
         flight = {
             'flight_id': result[0],
             'airline_name': result[1],
             'Departure City': result[2],
-            'Departure Time': result[3],
-            'Duration': result[4],
-            'Destination City': result[5],
-            'Arrival Time': result[6],
-            'payment_amount' : result[7],
+            'Departure Code': result[3],
+            'Departure Time': result[4],
+            'Duration': result[5],
+            'Destination City': result[6],
+            'Destination Code': result[7],
+            'Arrival Time': result[8],
+            'payment_amount' : result[9],
             'price' : formatted_price,
             'seat_type_id' : seattypeID
         }

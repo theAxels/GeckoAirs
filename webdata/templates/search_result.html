@@ -122,7 +122,7 @@
 							<select name="fromCity" id="fromCity" class="form-control custom-select">
 								<option>Select Departure City</option>
 								{% for city in cities %}
-									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
+									<option value="{{ city.city_id }}">{{ city.city_name }} ({{ city.city_code }})</option>
 								{% endfor %}
 							</select>
 							
@@ -134,7 +134,7 @@
 							<select name="toCity" id="toCity" class="form-control custom-select" required>
 								<option value="">Select Arival City</option>
 								{% for city in cities %}
-									<option value="{{ city.city_id }}">{{ city.city_name }}</option>
+									<option value="{{ city.city_id }}">{{ city.city_name }} ({{ city.city_code }})</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -219,7 +219,7 @@
 								<div class="dep-arr-details">
 									<div class="departure">
 										<span class="time" id="departure-time">{{ flight['Departure Time'] }}</span>
-										<span class="city" id="departure-city">{{ flight['Departure City'] }}</span>
+										<span class="city" id="departure-city">{{ flight['Departure City'] }}	({{ flight['Departure Code'] }})</span>
 									</div>
 									<div class="duration-dash">
 										<span class="duration">{{ flight['Duration'] }}</span>
@@ -230,7 +230,7 @@
 									</div>
 									<div class="arrival">
 										<span class="time" id="arrival-time">{{ flight['Arrival Time'] }}</span>
-										<span class="city" id="arrival-city">{{ flight['Destination City'] }}</span>
+										<span class="city" id="arrival-city">{{ flight['Destination City'] }}	({{ flight['Destination Code'] }})</span>
 									</div>
 								</div>
 								<div class="flight-price">
@@ -244,8 +244,8 @@
 						</form>
 					{% endfor %}
 				{% else %}
-					<img src="{{url_for('static', filename='images/no_flight_img.jpg')}}" id="no-flight-img" alt="">
-					<p>Sorry, there are no flights available for this route.</p>
+					<img width = "500px" src="{{url_for('static', filename='images/no_flight_img.jpg')}}" id="no-flight-img" alt="">
+					<h4>Sorry, there are no flights available for this route.</h4>
 				{% endif%}
 			</div>
 		</div>
