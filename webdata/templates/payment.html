@@ -6,8 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    
-	<link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.png')}}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" rel="js">
@@ -23,7 +21,7 @@
 </style>
 <body>
 
-<div class="container"> 
+<div class="container">     
     <a href="{{url_for('main.manage')}}" style="text-decoration: none; color: white;">
         <button id="buttonPay" class="mb-3" style="width: 120px;">
                 <span class="fas fa-arrow-left"></span> Back
@@ -232,9 +230,11 @@
                             <p class="p-blue h8 fw-bold mb-3">PAYMENT DATE : {{current_time.strftime('%Y-%m-%d')}}</p> 
                         </div> 
                         <div id="divError"></div>
-                        <button id="buttonPay">PAY
-                            <span class="ms-3 fas fa-arrow-right"></span>
-                        </button>
+                        <form action="" method="POST">
+                            <button id="buttonPay" type="id">PAY
+                                <span class="ms-3 fas fa-arrow-right"></span>
+                            </button>
+                        </form>
                         <!-- <div class="bg-pay d-block h7">PAY 
                             
                         </div>  -->

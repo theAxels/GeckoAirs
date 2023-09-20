@@ -214,14 +214,28 @@ def logout():
     #     db.session.commit()
     # return 'ok'
     
-@main.route('/pay/<int:booking_id>')
+@main.route('/pay/<int:booking_id>', methods=['GET', 'POST'])
 @login_required
 def pay(booking_id):
     booking = Booking.query.get(booking_id)
     
+    if not booking:
+        flash("Booking not found!", "danger")
+        return redirect(url_for('main.index'))
+    
     if booking.user_id != current_user.user_id:
         flash("You don't have access to this page!", "danger")
         return redirect(url_for('main.index'))
+    
+    if booking.booking_status == 'Paid':
+        flash("You have already paid for this booking!", "danger")
+        return redirect(url_for('main.manage'))
+    
+    if request.method == 'POST':
+        booking.booking_status = 'Paid'
+        db.session.commit()
+        return redirect(url_for('main.thankyou', booking_id=booking.booking_id))
+    
     current_time = datetime.datetime.utcnow()
     print(current_time)
     return render_template('payment.html', booking=booking, current_time=current_time)
@@ -293,6 +307,7 @@ def manage():
     params = {
         'user_Id': userId,
     }
+    
     # Execute the query and fetch the results
     results = db.session.execute(query, params)
     # books = [result for result in results]
@@ -325,6 +340,24 @@ def manage():
     
     return render_template('manage_bookings.html', books = books)
 
+@main.route('/thankyou/<int:booking_id>')
+@login_required
+def thankyou(booking_id):
+    
+    book = Booking.query.get(booking_id)
+    if not book:
+        flash("Booking not found!", "danger")
+        return redirect(url_for('main.index'))
+    
+    prev = request.referrer
+    prev = list(str(prev).split('/'))
+    check = '/'+'/'.join(prev[-2:])
+    
+    if (check != url_for('main.pay', booking_id=booking_id)):
+        flash('You are not allowed to access this page!', 'danger')
+        return redirect(url_for('main.index'))
+    
+    return render_template('thankyou.html')
 '''
 lagi di halaman html 
 url_for('main.pay', booking_id=booking.booking_id)
