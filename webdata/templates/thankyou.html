@@ -1,0 +1,317 @@
+<!-- /*
+* Bootstrap 5
+* Template Name: Furni
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="{{url_for('static' , filename='css/bootstrap.min.css')}}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="{{url_for('static' , filename='css/stylethankyou.css')}}" rel="stylesheet">
+		<link href="{{url_for('static' , filename='css/tiny_slider.css')}}" rel="stylesheet">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/owl.carousel.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/owl.theme.default.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/jquery.fancybox.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='fonts/icomoon/style.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='fonts/flaticon/font/flaticon.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/daterangepicker.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/aos.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+		<title>Thankyou!</title>
+	</head>
+
+	<body>
+
+		
+
+	<div class="untree_co-section" style="background-color:#6998AB; color: white;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center pt-5">
+          <span class="display-3 text-primary">
+            <img width="150px" src="{{url_for('static' , filename='images/pngsuccess.png')}}" alt="">
+          </span>
+          <p class="display-3 text-white">Thank you!</p>
+          <p class="lead mb-5">You order was successfuly completed.</p>
+          <p><a href="{{url_for('main.manage')}}" style="background-color: white; color: #6998AB; padding: 12px 14px; border-radius:20px;" >Back to Booking</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer">
+	<div class="inner first">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-lg-8">
+					<div class="widget">
+						<a href="{{url_for('main.index')}}" class="logo m-0">Gecko<span class="text-primary">.</span>Air</a>
+						<!-- <h3 class="heading">About TIX.it</h3> -->
+						<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-4">
+					<div class="widget">
+						<h3 class="heading">Contact</h3>
+						<ul class="list-unstyled quick-info links">
+							<li class="email"><a href="#">gecko.air@mail.com</a></li>
+							<li class="phone"><a href="#">+62 1500 888</a></li>
+							<li class="address"><a href="#">Grand Indonesia Tower A Lt.10, Jakarta 3910</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="customModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-bottom-0">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-title text-center">
+						<h4 id="modalTitle">Login</h4>
+					</div>
+					<div class="d-flex flex-column text-center">
+						<form id="modalForm" method="POST" action="?action=login">
+
+							
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer d-flex justify-content-center">
+					<div class="signup-section" id="toggleModalButton">
+						Not a member yet? <a class="text-info" id="toggleModalLink">Sign Up</a>.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>		
+
+
+	<div class="inner dark">
+		<div class="container">
+			<div class="row text-center">
+				<div class="col-md-8 mb-3 mb-md-0 mx-auto">
+					<p>Copyright &copy; <script>document.write(new Date().getFullYear());</script> Gecko.Air . All Rights Reserved.
+					</p>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+		<!-- End Footer Section -->	
+
+
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/tiny-slider.js"></script>
+		<script src="js/custom.js"></script>
+	</body>
+
+
+
+</html>
+<div id="overlayer"></div>
+	<div class="loader">
+		<div class="spinner-border" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+
+	<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
+
+	<script src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.animateNumber.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.waypoints.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.fancybox.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/aos.js')}}"></script>
+    <script src="{{url_for('static', filename='js/moment.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/daterangepicker.js')}}"></script>
+    <script src="{{url_for('static', filename='js/typed.js')}}"></script>
+	<!-- jQuery -->
+	<!-- <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js'></script> -->
+	<!-- Popper JS -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+	<!-- Bootstrap JS -->
+	<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js'></script>
+
+	<script>
+		const roundtripCheckbox = document.getElementById("roundtrip");
+		const returnDateDiv = document.getElementById("returnDateDiv");
+
+		roundtripCheckbox.addEventListener("change", function () {
+			if (roundtripCheckbox.checked) {
+				returnDateDiv.style.display = "block";
+			} else {
+				returnDateDiv.style.display = "none";
+			}
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+			var autoCloseAlerts = document.querySelectorAll('.auto-close-alert');
+			
+			autoCloseAlerts.forEach(function(alert) {
+				setTimeout(function() {
+					alert.style.display = 'none';
+				}, 5000);
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			var isLogin = true;
+		
+			function toggleModal() {
+				isLogin = !isLogin;
+				if (isLogin) {
+					$('#modalTitle').text('Login');
+					$('#modalForm').html(`
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email1" id="email1" placeholder="Your email address..." required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password1" id="password1" placeholder="Your password..." required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Login</button>
+					`);
+					$('#modalForm').attr('action', '?action=login');
+					$('#toggleModalLink').text('Sign Up');
+					$('#submitButton').text('Login');
+				} else {
+					$('#modalTitle').text('Register');
+					$('#modalForm').html(`
+						<label class="form-label">Date of Birth</label>
+						<div class="form-group">
+							<input type="date" class="form-control" name="dob" id="dob" placeholder="Date of Birth" required autocomplete="off">
+						</div>
+						<label class="form-label">Full Name</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required autocomplete="off">
+						</div>
+						<label class="form-label">Phone Number</label>
+						<div class="form-group">
+							<input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="Phone Number" required autocomplete="off">
+						</div>
+						<label class="form-label">Gender</label>
+						<select class="form-control" name="gender" id="gender" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<label class="form-label">Email</label
+						<div class="form-group">
+							<input type="email" class="form-control" name="email2" id="email2"placeholder="Email address" required autocomplete="off">
+						</div>
+						<label class="form-label">Password</label
+						<div class="form-group">
+							<input type="password" class="form-control" name="password2" id="password2" placeholder="Password" required autocomplete="off">
+						</div>
+						<button type="submit" class="btn btn-info btn-block btn-round" id="">Register</button>
+					`);
+					$('#modalForm').attr('action', '?action=register');
+					$('#toggleModalLink').text('Log In');
+					$('#submitButton').text('Register');
+				}
+			}
+		
+			$('#loginButton').on('click', function() {
+				isLogin = true;
+				toggleModal();
+				$('#customModal').modal('show');
+			});
+		
+			$('#toggleModalButton').on('click', function() {
+				toggleModal();
+			});
+		
+			
+			$('#customModal').on('show.bs.modal', function () {
+				toggleModal();
+			});
+		
+			$('#submitButton').on('click', function () {
+				if (isLogin) {
+					var email = $('#email1').val();
+					var password = $('#password1').val();
+					
+				} else {
+					var dob = $('#dob').val();
+
+					isLogin = true;
+            		toggleModal();
+				}
+				$('#customModal').modal('hide');
+			});
+		
+			<!-- $('#customModal').modal('show'); -->
+		});
+		$(function() {
+			var slides = $('.slides'),
+			images = slides.find('img');
+
+			images.each(function(i) {
+				$(this).attr('data-id', i + 1);
+			})
+
+			var typed = new Typed('.typed-words', {
+				strings: ["San Francisco."," Paris."," New Zealand.", " Maui.", " London.", "Pekanbaru."],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+				}
+
+			});
+
+			var typed2 = new Typed('.typed-words2', {
+				strings: ["Hello, "," こんにちは –,		"," Halo, 	", " 안녕하세요, 	", " 你好, 	", "Bonjour,	 "],
+				typeSpeed: 80,
+				backSpeed: 80,
+				backDelay: 4000,
+				startDelay: 1000,
+				loop: true,
+				showCursor: true,
+				preStringTyped: (arrayPos, self) => {
+					arrayPos++;
+					console.log(arrayPos);
+					$('.slides img').removeClass('active');
+					$('.slides img[data-id="'+arrayPos+'"]').addClass('active');
+				}
+
+			});
+
+		})
+
+
+	</script>
+	<script src="{{url_for('static', filename='js/custom.js')}}"></script>

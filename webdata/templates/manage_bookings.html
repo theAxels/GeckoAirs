@@ -73,8 +73,8 @@
 				<a href="{{url_for('main.index')}}" class="logo m-0">Gecko<span class="text-primary">.</span>Air</a>
 
 				<ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
-					<li class="active"><a href="{{url_for('main.index')}}">Home</a></li>
-					<li><a href="{{url_for('main.manage')}}">Manage Bookings</a></li>
+					<li><a href="{{url_for('main.index')}}">Home</a></li>
+					<li class="active"><a href="{{url_for('main.manage')}}">Manage Bookings</a></li>
 					<li><a href="{{url_for('main.about')}}">About</a></li>
 					{% if current_user.is_authenticated %}
 						<li>
@@ -145,9 +145,7 @@
 									</div>
 								</div>
 
-								<div class="book-button">
-									<button type="submit" class="bn-button">Pay</button>
-								</div>
+								
 							</form>
 						{% endif %}
 					{% endfor %}
