@@ -191,7 +191,7 @@
 						<span><b>- Unpaid bookings -</b></span>
 					</div>
 					{% for book in books %}
-						{% if book['booking_status'] == 'Unpaid':%}
+						{% if book['booking_status'] == 'Unpaid'%}
 							<form class="results" id="result1" method="POST" action="?action=pay">
 								<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
 								<div class="airline">
@@ -224,10 +224,12 @@
 									</div>
 								</div>
 								<div class="book-button">
-									<button type="submit" class="bn-button bg-danger mr-2 border border-0">Cancel</button>
+									<button type="button" class="bn-button bg-danger mr-2 border border-0">
+										<a class="text-white" href="{{url_for('main.cancel_booking' , id = book['booking_id'])}}">Cancel</a>
+									</button>
 									<button type="submit" class="bn-button border-0">Pay</button>
+								</form>
 								</div>
-							</form>
 						{% endif %}
 					{% endfor %}
 				{% else %}

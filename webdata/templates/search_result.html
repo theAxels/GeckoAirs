@@ -238,9 +238,11 @@
 								</div>
 							</div>
 		
-							<div class="book-button">
-								<button type="submit" class="bn-button">Book</button>
-							</div>
+							{% if flight['available_seats'] > 0%}
+								<div class="book-button">
+									<button type="submit" class="bn-button">Book</button>
+								</div>
+							{% endif %}
 						</form>
 					{% endfor %}
 				{% else %}

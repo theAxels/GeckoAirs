@@ -147,7 +147,7 @@ def result():
     # return render_template('index.html', cities=cities, seattypes=seattypes)
     
     query = text('''
-        SELECT f.flight_id, a.airline_name, c1.city_name, c1.city_code, DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, c2.city_code, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price'
+        SELECT f.flight_id, a.airline_name, c1.city_name, c1.city_code, DATE_FORMAT(TIME(f.flight_date), '%H:%i') AS 'Departure Time', CONCAT(FLOOR(r.duration_hours/60), 'h ', (r.duration_hours%60), 'm') AS 'Duration', c2.city_name, c2.city_code, DATE_FORMAT(DATE_ADD(TIME(f.flight_date), INTERVAL r.duration_hours MINUTE), '%H:%i') AS 'Arrival Time', f.flight_price + (f.flight_price * st.seat_type_price / 100) AS 'price', f.available_seats
         FROM flights f
         JOIN routes r ON r.route_id = f.route_id
         JOIN airlines a ON a.airline_id = f.airline_id
@@ -185,7 +185,8 @@ def result():
             'Arrival Time': result[8],
             'payment_amount' : result[9],
             'price' : formatted_price,
-            'seat_type_id' : seattypeID
+            'seat_type_id' : seattypeID,
+            'available_seats' : result[10]
         }
         flights.append(flight)
     print(flights)
@@ -233,8 +234,15 @@ def pay(booking_id):
     
     if request.method == 'POST':
         booking.booking_status = 'Paid'
+        payment_method = request.form.get('PaymentSelect')
+        payment_date = datetime.datetime.now()
+        
+        payment = Payment(booking_id=booking_id, payment_date=payment_date, paymentmethod=payment_method , payment_status = "Paid")
+        db.session.add(payment)
         db.session.commit()
         return redirect(url_for('main.thankyou', booking_id=booking.booking_id))
+    
+    
     
     current_time = datetime.datetime.utcnow()
     print(current_time)
@@ -371,6 +379,34 @@ def thankyou(booking_id):
         return redirect(url_for('main.index'))
     
     return render_template('thankyou.html')
+
+@main.route('/cancel_booking/<int:id>', methods=['GET', 'POST'])
+def cancel_booking(id):
+    if not current_user.is_authenticated:
+        flash('Need login to cancel book !', 'danger')
+        return redirect(url_for('main.index'))
+    userId = current_user.user_id
+    booking_id = id
+    booking = Booking.query.get(booking_id)
+    if not booking:
+        flash("Booking not found!", "danger")
+        return redirect(url_for('main.index'))
+    
+    if booking.user_id != current_user.user_id:
+        flash("You don't have access to this page!", "danger")
+        return redirect(url_for('main.index'))
+    
+    if booking.booking_status == 'Paid':
+        flash("You have already paid for this booking!", "danger")
+        return redirect(url_for('main.manage'))
+    
+    booking.booking_status = 'Cancelled'
+    booking.cancel_date = datetime.datetime.now()
+    db.session.commit()
+    
+    flash('Bookings cancelled successfull!', 'success')
+    return redirect(url_for('main.manage'))
+    
 '''
 lagi di halaman html 
 url_for('main.pay', booking_id=booking.booking_id)

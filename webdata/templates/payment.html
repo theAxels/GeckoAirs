@@ -230,14 +230,19 @@
                             <p class="p-blue h8 fw-bold mb-3">PAYMENT DATE : {{current_time.strftime('%Y-%m-%d')}}</p> 
                         </div> 
                         <div id="divError"></div>
-                        <form action="" method="POST">
-                            <button id="buttonPay" type="id">PAY
+
+                        
+
+                        <form action="" method="POST" id="paymentForm">
+                            <select name="PaymentSelect" class="custom-select custom-select-lg mb-3 w-100 bg-danger text-white p-2 rounded" required>
+                                <option value="BCA">BCA</option>
+                                <option value="BNI">BNI</option>
+                                <option value="ShopeePay">ShopeePay</option>
+                            </select>
+                            <button id="buttonPay" type="submit">PAY
                                 <span class="ms-3 fas fa-arrow-right"></span>
                             </button>
                         </form>
-                        <!-- <div class="bg-pay d-block h7">PAY 
-                            
-                        </div>  -->
                     </div> 
                 </div> 
             </div> 
@@ -245,6 +250,33 @@
     </div> 
 </div>
 </body>
+
+<script>
+    document.getElementById("paymentForm").addEventListener("submit", function(event) {
+        const paymentSelect = document.querySelector('select[name="PaymentSelect"]');
+        
+        // Check if a payment method is selected
+        if (paymentSelect.value === "") {
+            alert("Please select a payment method.");
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script>
+
+	<script src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/owl.carousel.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.animateNumber.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.waypoints.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery.fancybox.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/aos.js')}}"></script>
+    <script src="{{url_for('static', filename='js/moment.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/daterangepicker.js')}}"></script>
+    <script src="{{url_for('static', filename='js/typed.js')}}"></script>
 
 <div id="asynchronous"></div>
 <script src="{{url_for('static', filename='js/scriptPayment.js')}}"></script>
