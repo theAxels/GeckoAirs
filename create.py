@@ -14,8 +14,31 @@ from webdata import app, db, bcrypt
 #     db.session.add(Flight3)
 #     db.session.commit()
     
+    
+# def main():
+#     payment1 = Payment(booking_id = 6 , payment_date = "2022-10-04" , paymentmethod= "BCA")
+#     payment2 = Payment(booking_id = 8 , payment_date = "2023-04-10" , paymentmethod = "BNI")
+#     payment3 = Payment(booking_id = 7 , payment_date = "2023-04-10" , paymentmethod = "BNI")
+#     payment4 = Payment(booking_id = 9 , payment_date = "2023-04-10" , paymentmethod = "ShopeePay")
+    
+#     db.session.add(payment1)
+#     db.session.add(payment2)
+#     db.session.add(payment3)
+#     db.session.add(payment4)
+#     db.session.commit()
+    
 def main():
-    Airline1 = Airlines()
+    refund1 = RefundPayment(payment_id = 37 , refund_date = "2022-10-04")
+    refund2 = RefundPayment(payment_id = 38 , refund_date = "2023-04-10")
+    refund3 = RefundPayment(payment_id = 39 , refund_date = "2023-04-10")
+    
+    db.session.add(refund1)
+    db.session.add(refund2)
+    db.session.add(refund3)
+    db.session.commit()
+
+# def main():
+#     Airline1 = Airlines()
     
 
 if __name__ == '__main__':
