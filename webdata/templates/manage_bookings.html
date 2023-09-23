@@ -113,7 +113,7 @@
 					</div>
 					{% for book in books %}
 						{% if book['booking_status'] == 'Paid' :%}
-							<form class="results" id="result1" method="POST" action="?action=pay">
+							<form class="results" id="result1" method="POST" action="?action=refund">
 								<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
 								<div class="airline">
 									<input type='hidden' id="bookingId" name="booking_id" value="{{ book['booking_id'] }}" style="display:none;"></input>
@@ -144,16 +144,54 @@
 										<span class="price">IDR {{ book['price'] }}</span> <p id="pax">,00</p>
 									</div>
 								</div>
-
-								
+								<div class="book-button">
+									<button type="submit" class="bn-button bg-success mr-2 border border-0">Refund</button>
+								</div>
+							</form>
+							{% elif book['booking_status'] == 'Refund' :%}
+							<form class="results bg-secondary bg-gradient"  id="result1" method="POST" action="?action=refund">
+								<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
+								<div class="airline">
+									<input type='hidden' id="bookingId" name="booking_id" value="{{ book['booking_id'] }}" style="display:none;"></input>
+									<input type='hidden' id="flightNumber" name="flight_number" value="{{ book['flight_number'] }}" style="display:none;"></input>
+									<img src="{{url_for('static', filename='images/Garuda.png')}}" alt="logo garuda">
+									<span class="airline-name">{{ book['airline_name'] }}</span>
+								</div>
+								<br>
+								<div class="details">
+									<div class="dep-arr-details">
+										<div class="departure">
+											<span class="time" id="departure-time">{{ book['Departure Time'] }}</span>
+											<span class="city" id="departure-city">{{ book['Departure City'] }}</span>
+										</div>
+										<div class="duration-dash">
+											<span class="duration">{{ book['Duration'] }}</span>
+											<div id="images">
+												<img src="{{url_for('static', filename='images/dash.png')}}" style="filter:brightness(0%);" id="dash-img" alt="">
+												<img src="{{url_for('static', filename='images/plane.png')}}" style="filter:brightness(0%);" id="plane-img" alt="">
+											</div>
+										</div>
+										<div class="arrival">
+											<span class="time" id="arrival-time">{{ book['Arrival Time'] }}</span>
+											<span class="city" id="arrival-city">{{ book['Destination City'] }}</span>
+										</div>
+									</div>
+									<div class="flight-price">
+										<div class="d-flex flex-column align-items-end ">
+											<p style="font-size:25px;" class="mb-0"><strong >[Refund]</strong></p>
+											<span class="price"  class="mb-0">IDR {{ book['price'] }}</span> <p id="pax">,00</p>
+										</div>
+									</div>
+								</div>
 							</form>
 						{% endif %}
 					{% endfor %}
+					
 					<div class="centered">
 						<span><b>- Unpaid bookings -</b></span>
 					</div>
 					{% for book in books %}
-						{% if book['booking_status'] == 'Unpaid' :%}
+						{% if book['booking_status'] == 'Unpaid':%}
 							<form class="results" id="result1" method="POST" action="?action=pay">
 								<span class="airline-name"><b>BOOK{{ book['booking_id'] }}</b></span>
 								<div class="airline">
@@ -185,9 +223,9 @@
 										<span class="price">IDR {{ book['price'] }}</span> <p id="pax">,00</p>
 									</div>
 								</div>
-
 								<div class="book-button">
-									<button type="submit" class="bn-button">Pay</button>
+									<button type="submit" class="bn-button bg-danger mr-2 border border-0">Cancel</button>
+									<button type="submit" class="bn-button border-0">Pay</button>
 								</div>
 							</form>
 						{% endif %}

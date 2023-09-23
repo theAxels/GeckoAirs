@@ -113,7 +113,6 @@ class Booking(db.Model):
     def seat_type_detail(self):
         return SeatType.query.filter_by(seat_type_id=self.seat_type_id).first()
 
-    # booking.flight_detail.flight_name
     @property
     def __repr__(self):
         return f'{self.booking_id} - {self.user_id} - {self.flight_id} - {self.booking_date} - {self.booking_status} - {self.seat_type_id} - {self.payment_amount}'

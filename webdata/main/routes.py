@@ -6,7 +6,7 @@ from flask_login import login_required, login_user, logout_user
 
 
 from webdata import bcrypt, db
-from webdata.models import User, City, City, SeatType, Flight, Route, Airlines, datetime, Booking
+from webdata.models import User, City, City, SeatType, Flight, Route, Airlines, datetime, Booking, RefundPayment, Payment
 import datetime
 import locale
 
@@ -303,14 +303,11 @@ def manage():
         JOIN cities c2 ON c2.city_id=r.destination_city_id
         WHERE b.user_id = :user_Id;
     ''')
-     # Bind query parameters
+    
     params = {
         'user_Id': userId,
     }
-    
-    # Execute the query and fetch the results
     results = db.session.execute(query, params)
-    # books = [result for result in results]
     books = []
     for result in results:
         total = result[8]
@@ -337,6 +334,22 @@ def manage():
             booking_id = request.form.get('booking_id')
             print(booking_id)
             return redirect(url_for('main.pay', booking_id=booking_id))
+        
+        elif action == 'refund':
+            booking_id = request.form.get('booking_id')
+            payment = db.session.query(Payment).filter_by(booking_id=booking_id).first()
+            payment_id = payment.payment_id
+            
+            booking = db.session.query(Booking).filter_by(booking_id=booking_id).first()
+            booking.booking_status = "Refund"
+            db.session.commit()
+            
+            refund = RefundPayment(payment_id=payment_id, refund_date=datetime.datetime.now())
+            db.session.add(refund)
+            db.session.commit()
+            
+            flash('Bookings refund successfull!', 'success')
+            return redirect(url_for('main.manage'))
     
     return render_template('manage_bookings.html', books = books)
 
