@@ -99,6 +99,7 @@ class Booking(db.Model):
     booking_status = db.Column(db.String(20), nullable=False)
     seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
     payment_amount = db.Column(db.Integer, nullable=False)
+    cancel_date = db.Column(db.DateTime, nullable=True)
     
     @property
     def flight_detail(self):
@@ -120,8 +121,10 @@ class Booking(db.Model):
 class Payment(db.Model):
     __tablename__ = 'payments'
     payment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.booking_id'), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey('bookings.booking_id'), nullable=False , unique=True)
     payment_date = db.Column(db.DateTime, nullable=False)
+    paymentmethod = db.Column(db.String(20), nullable=False)
+    payment_status = db.Column(db.String(20), nullable=False)
     
 class Route(db.Model):
     __tablename__ = 'routes'
@@ -137,3 +140,9 @@ class Route(db.Model):
     @property
     def destination_city_detail(self):
         return City.query.get(self.destination_city_id)
+    
+class RefundPayment(db.Model):
+    __tablename__ = 'refund_payment'
+    refund_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payments.payment_id'), nullable=False , unique = True)
+    refund_date = db.Column(db.DateTime, nullable=False)
