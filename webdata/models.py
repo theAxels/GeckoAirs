@@ -97,8 +97,6 @@ class Booking(db.Model):
     flight_id = db.Column(db.Integer, db.ForeignKey('flights.flight_id'), nullable=False)
     booking_date = db.Column(db.DateTime, nullable=False)
     booking_status = db.Column(db.String(20), nullable=False)
-    seat_type_id = db.Column(db.Integer, db.ForeignKey('seat_types.seat_type_id'), nullable=False)
-    payment_amount = db.Column(db.Integer, nullable=False)
     cancel_date = db.Column(db.DateTime, nullable=True)
     
     @property
