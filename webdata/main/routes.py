@@ -123,11 +123,9 @@ def result():
             userId = current_user.user_id
             flightId = request.form.get('flight_id')
             booking_status = 'Unpaid'
-            seattypeID = request.form.get('seat_type_id')
-            payment_amount = request.form.get('payment_amount')
             booking_date = datetime.datetime.now()
             
-            book = Booking(user_id=userId, flight_id=flightId, booking_status = booking_status, seat_type_id = seattypeID, payment_amount = payment_amount, booking_date=booking_date)
+            book = Booking(user_id=userId, flight_id=flightId, booking_status = booking_status, booking_date=booking_date)
 
             db.session.add(book)
             db.session.commit()
